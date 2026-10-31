@@ -10,18 +10,8 @@ let idc = 0;
 const uid = (p: string) => `${p}-${(++idc).toString(36)}`;
 const movId = () => uid("mv");
 
-function movement(
-  db: DemoDB,
-  productId: string,
-  branchId: string,
-  type: Sale["status"] extends never ? never : Parameters<typeof pushMov>[3],
-  qtyChange: number,
-  ref: string,
-  userId: string,
-  at: string,
-) {
-  pushMov(db, productId, branchId, type, qtyChange, ref, userId, at);
-}
+const movement = pushMov;
+
 
 function pushMov(
   db: DemoDB,
