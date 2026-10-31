@@ -1,24 +1,36 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useDemo } from "@/demo/hooks";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "BrathaMatu Kuku POS" },
+      { name: "description", content: "Premium poultry POS, inventory and business management for BrathaMatu." },
+      { property: "og:title", content: "BrathaMatu Kuku POS" },
+      { property: "og:description", content: "Premium poultry POS, inventory and business management for BrathaMatu." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  const navigate = useNavigate();
+  const snap = useDemo();
+
+  useEffect(() => {
+    if (snap) navigate({ to: snap.user ? "/dashboard" : "/login", replace: true });
+  }, [snap, navigate]);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="pos-theme flex min-h-screen items-center justify-center">
+      <div className="text-center">
+        <div className="text-5xl">🐔</div>
+        <p className="mt-3 font-display text-lg tracking-wide text-pos-foreground">BRATHAMATU</p>
+        <p className="mt-1 text-sm text-pos-muted-foreground">Loading…</p>
+      </div>
     </div>
   );
 }
